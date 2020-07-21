@@ -12,9 +12,9 @@ import MapKit
 struct LocationTextFieldView: View {
     
     @ObservedObject var locationSearchService: LocationSearchService
-    @ObservedObject var anotationData = AnotationModel()
+    @ObservedObject var anotationData : AnotationModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @Binding var locationTitle: String
+//    @Binding var locationTitle: String
     private let completer = MKLocalSearchCompleter()
 
     var body: some View {
@@ -23,7 +23,7 @@ struct LocationTextFieldView: View {
                 SearchBar(text: $locationSearchService.searchQuery)
                 List(locationSearchService.completions) { completion in
                     Button(action: {
-                        self.locationTitle = completion.title
+                        self.anotationData.adress = completion.title
                         self.convertAddressToCoords(adress: completion.subtitle)
                         self.presentationMode.wrappedValue.dismiss()
                     })
@@ -51,6 +51,10 @@ struct LocationTextFieldView: View {
             if (lat != nil) && (lon != nil) {
                 self.anotationData.latitude = lat!
                 self.anotationData.longitude = lon!
+            } else {
+                if placemark == nil {
+                    self.anotationData.adress = ""
+                }
             }
         }
     }

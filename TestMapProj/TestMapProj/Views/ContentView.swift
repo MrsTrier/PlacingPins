@@ -47,9 +47,11 @@ struct ContentView: View {
                     self.pastCenterCoordinate = self.centerCoordinate
                     self.anotationData.latitude = self.pastCenterCoordinate.latitude
                     self.anotationData.longitude = self.pastCenterCoordinate.longitude
-                    self.convertCoordsToAddress(latitude: self.pastCenterCoordinate.latitude, longitude: self.pastCenterCoordinate.longitude) { (adress) in self.anotationData.adress = adress
-                        if self.anotationData.adress == "" {
-                            self.wifiAlert = true
+                    DispatchQueue.main.async {
+                        self.convertCoordsToAddress(latitude: self.pastCenterCoordinate.latitude, longitude: self.pastCenterCoordinate.longitude) { (adress) in self.anotationData.adress = adress
+                            if self.anotationData.adress == "" {
+                                self.wifiAlert = true
+                            }
                         }
                     }
                     self.locations.append(newLocation)
@@ -70,6 +72,8 @@ struct ContentView: View {
                             self.showAllAnotations.toggle()
                             self.removeAnnotations = self.locations
                             self.locations.removeAll()
+                            DispatchQueue.main.async {
+
                             for ad in self.ads {
                                 let newLocation = MKPointAnnotation()
                                 newLocation.coordinate.latitude = ad.latitude
@@ -81,6 +85,8 @@ struct ContentView: View {
                                 Размещено на \(String(describing: ad.duration)) час(а)
                                 """
                                 self.locations.append(newLocation)
+                                }
+                                
                             }
                         }) { Text("Мои размещения") }
                         .padding()
@@ -114,9 +120,8 @@ struct ContentView: View {
                         
                         Button(action: {
                             self.showLocationTF.toggle()
-                            self.showWhoView.toggle()
                         }) { Image(systemName: "questionmark") }
-                            .sheet(isPresented: self.$showLocationTF, content: { LocationTextFieldView(locationSearchService: self.locationSearchService, locationTitle: self.$anotationData.adress) })
+                            .sheet(isPresented: self.$showLocationTF, content: { LocationTextFieldView(locationSearchService: self.locationSearchService, anotationData: self.anotationData) })
                         .padding()
                         .background(Color.black.opacity(0.50))
                         .foregroundColor(.white)
@@ -151,6 +156,7 @@ struct ContentView: View {
                             self.showAllAnotations.toggle()
                             self.removeAnnotations = self.locations
                             self.locations.removeAll()
+                            self.anotationData.adress = ""
                         }) { Image(systemName: "plus") }.alert(isPresented: $showingPlaceDetails) {
                             Alert(title: Text(selectedPlace?.title ?? "Информация отсутствует"), message: Text(selectedPlace?.subtitle ?? "Информация отсутствует"), dismissButton: .default(Text("OK")))}
                         .padding()
