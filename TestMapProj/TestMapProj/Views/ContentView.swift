@@ -47,11 +47,9 @@ struct ContentView: View {
                     self.pastCenterCoordinate = self.centerCoordinate
                     self.anotationData.latitude = self.pastCenterCoordinate.latitude
                     self.anotationData.longitude = self.pastCenterCoordinate.longitude
-                    DispatchQueue.main.async {
-                        self.convertCoordsToAddress(latitude: self.pastCenterCoordinate.latitude, longitude: self.pastCenterCoordinate.longitude) { (adress) in self.anotationData.adress = adress
-                            if self.anotationData.adress == "" {
-                                self.wifiAlert = true
-                            }
+                    self.convertCoordsToAddress(latitude: self.pastCenterCoordinate.latitude, longitude: self.pastCenterCoordinate.longitude) { (adress) in self.anotationData.adress = adress
+                        if self.anotationData.adress == "" {
+                            self.wifiAlert = true
                         }
                     }
                     self.locations.append(newLocation)
@@ -72,7 +70,6 @@ struct ContentView: View {
                             self.showAllAnotations.toggle()
                             self.removeAnnotations = self.locations
                             self.locations.removeAll()
-                            DispatchQueue.main.async {
 
                             for ad in self.ads {
                                 let newLocation = MKPointAnnotation()
@@ -86,8 +83,6 @@ struct ContentView: View {
                                 """
                                 self.locations.append(newLocation)
                                 }
-                                
-                            }
                         }) { Text("Мои размещения") }
                         .padding()
                         .background(Color.black.opacity(0.50))
