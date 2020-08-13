@@ -13,8 +13,7 @@
 - Alerts и запрос на использование локации пользователя;
 
 ## **Демо**
-https://vimeo.com/user121338416/review/447582928/00d3042778
-[![Watch the video]](https://vimeo.com/447582928)
+[Watch the video!](https://vimeo.com/447582928)
 
 ## **Процесс работы программы.**
     Пример.
